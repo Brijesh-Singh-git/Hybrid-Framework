@@ -7,10 +7,7 @@ import org.apache.logging.log4j.core.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.*;
 
 import java.time.Duration;
 
@@ -20,21 +17,30 @@ public class BaseClass {
    public Logger logger;
 
 
-    @BeforeSuite
-    public void setup() throws InterruptedException {
+    @BeforeClass
+    @Parameters({"os", "browser"})
+    public void setup(String os, String br)
 
-        //loading log4j file
-        LogManager.getLogger(this.getClass());
+    {
 
-        driver = new ChromeDriver();
+        logger= (Logger) LogManager.getLogger(this.getClass());//Log4j
+
+        switch(br.toLowerCase())
+        {
+            case "chrome": driver=new ChromeDriver(); break;
+            case "edge": driver=new EdgeDriver(); break;
+            default: System.out.println("No matching browser..");
+                return;
+        }
+
+        driver.manage().deleteAllCookies();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 
         driver.get("https://demo.opencart.com/index.php?route=common/home&language=en-gb");
         driver.manage().window().maximize();
-
     }
 
-    @AfterSuite
+    @AfterClass
     public void tearDown()
     {
         driver.close();
