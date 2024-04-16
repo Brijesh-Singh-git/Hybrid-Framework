@@ -9,22 +9,34 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.testng.annotations.*;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.time.Duration;
+import java.util.Properties;
 
 public class BaseClass {
 
    public  WebDriver driver;
    public Logger logger;
+    public Properties p;
 
 
     @BeforeClass
     @Parameters({"os", "browser"})
-    public void setup(String os, String br)
+    public void setup(String os, String br) throws IOException {
 
-    {
 
+        //loading properties file
+        FileReader file=new FileReader(".//src//test//resources//config.properties");
+        p=new Properties();
+        p.load(file);
+
+        //loading log4j file
         logger= (Logger) LogManager.getLogger(this.getClass());//Log4j
 
+
+        //launching browser based on condition
         switch(br.toLowerCase())
         {
             case "chrome": driver=new ChromeDriver(); break;
@@ -36,7 +48,7 @@ public class BaseClass {
         driver.manage().deleteAllCookies();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 
-        driver.get("https://demo.opencart.com/index.php?route=common/home&language=en-gb");
+        driver.get(p.getProperty("appURL"));
         driver.manage().window().maximize();
     }
 
