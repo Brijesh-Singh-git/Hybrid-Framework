@@ -2,6 +2,8 @@ package testBase;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -15,11 +17,15 @@ import java.time.Duration;
 public class BaseClass {
 
    public  WebDriver driver;
+   public Logger logger;
+
 
     @BeforeSuite
     public void setup() throws InterruptedException {
 
-//        System.setProperty("webdriver.edge.driver", "Drivers/msedgedriver.exe");
+        //loading log4j file
+        LogManager.getLogger(this.getClass());
+
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 
