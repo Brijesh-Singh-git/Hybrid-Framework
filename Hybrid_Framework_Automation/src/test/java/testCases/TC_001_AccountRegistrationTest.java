@@ -12,7 +12,7 @@ import testBase.BaseClass;
 
 public class TC_001_AccountRegistrationTest extends BaseClass {
 
-    @Test
+    @Test(groups = {"sanity", "master"})
     public void verify_account_registration()
     {
         logger = (Logger) LogManager.getLogger(TC_001_AccountRegistrationTest.class); // Initialize logger
